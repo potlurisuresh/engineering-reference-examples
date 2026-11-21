@@ -1,0 +1,24 @@
+name: reference-ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Multi-tenant isolation tests
+        working-directory: multi-tenant-isolation
+        run: python -m unittest test_isolation.py -v
+      - name: RBAC tests
+        working-directory: rbac-patterns
+        run: python -m unittest test_rbac.py -v
+      - name: AI eval harness tests
+        working-directory: ai-eval-hitl
+        run: python -m unittest test_eval.py -v
